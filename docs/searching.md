@@ -94,7 +94,11 @@ grid = Grid.parse("""\
 
 def uphill(pos):
     height = int(grid[pos])
-    return [(q, 1) for _, q, v in grid.neighbors(pos) if v.isdigit() and int(v) == height + 1]
+    return [
+        (q, 1)
+        for _, q, v in grid.neighbors(pos)
+        if v.isdigit() and int(v) == height + 1
+    ]
 
 score = rating = 0
 for start, value in grid.cells():

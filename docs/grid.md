@@ -50,7 +50,8 @@ grid = Grid.parse("""\
 for delta, pos, value in grid.neighbors(Vec(1, 1)):
     print(f"{delta} -> {pos} = {value!r}")
 
-print("8-way count:", sum(v == "#" for _, _, v in grid.neighbors(Vec(1, 1), ALL8)))
+walls = sum(v == "#" for _, _, v in grid.neighbors(Vec(1, 1), ALL8))
+print("8-way count:", walls)
 ```
 
 The delta comes back with the position so a caller can attach a label to the direction it
