@@ -1,0 +1,42 @@
+[project]
+name = "puzzlekit"
+version = "0.1.0"
+description = "Small helpers for puzzle code: implicit-graph search, integer grids, input plumbing"
+readme = "README.md"
+authors = [
+    { name = "Jan Burgy", email = "jburgy@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = []
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+classifiers = [
+    "Programming Language :: Python :: 3 :: Only",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/jburgy/puzzlekit"
+
+[build-system]
+requires = ["uv_build>=0.10.9,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.14",
+    "numpy>=2.1",
+    "scipy>=1.14",
+]
+
+[tool.pytest.ini_options]
+addopts = ["--doctest-modules", "--strict-markers"]
+testpaths = ["tests", "src"]
+pythonpath = ["examples"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "ARG", "SIM"]
