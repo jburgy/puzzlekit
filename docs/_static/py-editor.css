@@ -64,9 +64,17 @@ body[data-theme="dark"] {
 /* CodeMirror ships a light theme and leaves its own background transparent, which in
    dark mode means black text on a black page. Give the shadow host a fixed light
    surface and invert the whole widget; hue-rotate keeps the token colours recognisable.
-   font-size is set here rather than on .cm-editor because inherited properties are the
-   only ones that cross the shadow boundary. */
+
+   `color-scheme: only light` is load-bearing, not decoration. PyScript's shadow root
+   sets `:host { all: initial }`, so unstyled identifiers fall back to the initial
+   colour; Chrome's auto-dark rewrites exactly those to white while leaving authored
+   token colours alone, and the inversion below then turns them black on black. Pinning
+   the subtree to light makes that fallback deterministically black before inverting.
+
+   font-size is set here rather than on .cm-editor because the shadow boundary only
+   admits inherited properties. */
 .py-editor-input > div:not([class]) {
+  color-scheme: only light;
   background: #fff;
   filter: var(--pk-editor-filter, none);
   font-size: 0.8rem;
