@@ -1,0 +1,52 @@
+/* PyScript's editor is a CodeMirror instance inside a shadow root, so page CSS cannot
+   reach its internals. Two things are still reachable: the box PyScript renders around
+   it, and the shadow host, which can be filtered. */
+
+/* core.css labels every box with its env name; it means nothing to a reader. */
+.py-editor-box::before {
+  content: none;
+}
+
+/* core.css also fades the Run button in on hover, which hides the point of the page. */
+.py-editor-box .py-editor-run-button {
+  opacity: 1;
+}
+
+.py-editor-box {
+  margin: 1rem 0 1.5rem;
+  border: 1px solid var(--color-background-border, #ccc);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* CodeMirror ships a light theme and leaves its own background transparent, which in
+   dark mode means black text on a black page. Give the shadow host a fixed light
+   surface and invert the whole widget; hue-rotate keeps the token colours recognisable. */
+.py-editor-input > div:not([class]) {
+  background: #fff;
+  filter: var(--pk-editor-filter, none);
+}
+
+body[data-theme="dark"] {
+  --pk-editor-filter: invert(1) hue-rotate(180deg);
+}
+
+@media (prefers-color-scheme: dark) {
+  body:not([data-theme="light"]) {
+    --pk-editor-filter: invert(1) hue-rotate(180deg);
+  }
+}
+
+.py-editor-output {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.75rem;
+  white-space: pre-wrap;
+  border-top: 1px solid var(--color-background-border, #ccc);
+  background: var(--color-background-secondary, #f6f6f6);
+  color: var(--color-foreground-primary);
+}
+
+.py-editor-output:empty {
+  display: none;
+  border-top: none;
+}

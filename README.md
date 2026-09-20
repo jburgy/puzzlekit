@@ -8,6 +8,9 @@ differently, in file after file — and because at least one of those rewrites w
 
 Python 3.13+, no runtime dependencies.
 
+**Docs: <https://bur.gy/puzzlekit/>** — every example there is editable and runs in the
+browser via PyScript.
+
 ```bash
 uv add puzzlekit          # or: uv sync  (development)
 uv run pytest
