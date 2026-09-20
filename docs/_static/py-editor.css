@@ -2,14 +2,56 @@
    reach its internals. Two things are still reachable: the box PyScript renders around
    it, and the shadow host, which can be filtered. */
 
+/* Furo emits <meta name="color-scheme"> but never sets the CSS property, so Chrome's
+   "Auto Dark Mode for Web Contents" still treats this as a light-only page and darkens
+   it itself - on top of the inversion below, which is how the editor ends up
+   double-processed and muddy. Declaring the property is the documented opt-out, and it
+   also fixes the editor's scrollbars. */
+html {
+  color-scheme: light dark;
+}
+
+body[data-theme="light"] {
+  color-scheme: light;
+}
+
+body[data-theme="dark"] {
+  color-scheme: dark;
+}
+
 /* core.css labels every box with its env name; it means nothing to a reader. */
 .py-editor-box::before {
   content: none;
 }
 
-/* core.css also fades the Run button in on hover, which hides the point of the page. */
+/* core.css also fades the Run button in on hover, which hides the point of the page.
+   Showing it permanently only works once it stops floating over the code: it is a
+   sibling of the shadow host, so the dark-mode inversion below never reaches it. */
+.py-editor-input {
+  display: flex;
+  flex-direction: column-reverse; /* children are [button, editor] */
+}
+
 .py-editor-box .py-editor-run-button {
+  position: static;
+  align-self: flex-end;
   opacity: 1;
+  margin: 0.25rem 0.4rem;
+  padding: 0.05rem 0.3rem;
+  border: 1px solid var(--color-background-border, #ccc);
+  border-radius: 3px;
+  background: var(--color-background-secondary, #f6f6f6);
+  color: var(--color-foreground-secondary);
+  cursor: pointer;
+}
+
+.py-editor-box .py-editor-run-button:hover {
+  background: var(--color-background-hover);
+}
+
+/* PyScript hardcodes fill="#464646" on the glyph. */
+.py-editor-box .py-editor-run-button svg path {
+  fill: currentColor;
 }
 
 .py-editor-box {
@@ -21,10 +63,13 @@
 
 /* CodeMirror ships a light theme and leaves its own background transparent, which in
    dark mode means black text on a black page. Give the shadow host a fixed light
-   surface and invert the whole widget; hue-rotate keeps the token colours recognisable. */
+   surface and invert the whole widget; hue-rotate keeps the token colours recognisable.
+   font-size is set here rather than on .cm-editor because inherited properties are the
+   only ones that cross the shadow boundary. */
 .py-editor-input > div:not([class]) {
   background: #fff;
   filter: var(--pk-editor-filter, none);
+  font-size: 0.8rem;
 }
 
 body[data-theme="dark"] {
