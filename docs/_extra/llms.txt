@@ -1,0 +1,47 @@
+# puzzlekit
+
+> Small helpers for puzzle code: search over implicit state spaces, integer grids, input
+> parsing. Python 3.13+, no runtime dependencies. Extracted from a review of ~44 Advent
+> of Code and Google Foobar solutions, so each function exists because the same shape was
+> rewritten — often differently, sometimes wrongly — in file after file.
+
+Key API decisions, because they are unusual on purpose:
+
+- `explore(starts, succ, *, order, key=identity)` takes a successor **function**, not a
+  materialised graph. `order` is `"fifo"`, `"lifo"` or `"priority"` and has **no
+  default**: `"lifo"` with a visited set is component labelling, `"fifo"` is
+  shortest-path, and confusing them is a silent wrong answer.
+- `key` sets the deduplication identity. `key=None` disables dedup entirely, which is
+  required for counting paths rather than states. `order="priority"` with `key=None`
+  raises.
+- `succ(state)` yields `(next_state, step_cost)` and owns all domain rules: bounds,
+  walls, turn costs.
+- `dijkstra` returns `(dist, preds)` with every optimal predecessor; `backtrack(preds,
+  targets)` recovers all shortest paths without a second traversal.
+- `Grid[p]` raises off-grid rather than wrapping like a list. `Grid.get(p, "#")` is the
+  bounds-checked fetch. `Grid.neighbors` yields `(delta, position, value)`.
+- `Vec` is `(row, col)` with row increasing downwards; `rot(1)` is clockwise;
+  `norm2()` returns an exact `int`.
+- `ints(s)` returns every integer in a string; `sections(s)` splits on blank lines.
+
+Deliberately not provided, with the recommended alternative: union-find
+(`scipy.cluster.hierarchy.DisjointSet`), integer infinity (`sys.maxsize`), popcount
+(`int.bit_count`), flood fill and neighbour counts (`scipy.ndimage.label`,
+`scipy.ndimage.convolve`), sentinel borders (`numpy.pad`), sliding windows
+(`numpy.lib.stride_tricks.sliding_window_view`), Dijkstra on explicit graphs
+(`scipy.sparse.csgraph`, `networkx`), topological order (`graphlib.TopologicalSorter`),
+memoization (`functools.cache`), puzzle input fetching (`aocd`).
+
+## Docs
+
+- [Search](https://bur.gy/puzzlekit/searching.html): `explore`, `dijkstra`, `backtrack`; why `order` has no default; when not to use a frontier at all
+- [Grids and vectors](https://bur.gy/puzzlekit/grid.html): `Grid`, `Vec`, `ray`, and when to reach for numpy/scipy instead
+- [Parsing and bits](https://bur.gy/puzzlekit/parsing.html): `ints`, `sections`, `text`, `lines`, `bits`
+- [Design notes](https://bur.gy/puzzlekit/design.html): the review findings behind each API decision, and the three modules that were cut because they already existed
+- [API reference](https://bur.gy/puzzlekit/api.html): full signatures and docstrings
+
+## Optional
+
+- [Source](https://github.com/jburgy/puzzlekit): implementation and tests
+- [Examples](https://github.com/jburgy/puzzlekit/tree/main/examples): runnable solutions that assert their own answers
+- [Originating code review](https://github.com/jburgy/blog/blob/main/CODE_REVIEW.md): the full write-up this package was extracted from

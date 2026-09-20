@@ -29,6 +29,11 @@ dev = [
     "numpy>=2.1",
     "scipy>=1.14",
 ]
+docs = [
+    "sphinx>=8.1",
+    "myst-parser>=4.0",
+    "furo>=2024.8.6",
+]
 
 [tool.pytest.ini_options]
 addopts = ["--doctest-modules", "--strict-markers"]
@@ -40,3 +45,7 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "ARG", "SIM"]
+
+[tool.ruff.format]
+# Doc snippets are deliberately compact; PEP 8 blank lines make them read worse.
+exclude = ["docs/*.md"]

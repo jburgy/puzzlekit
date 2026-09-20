@@ -12,3 +12,7 @@ wheels/
 # Tooling caches
 .pytest_cache/
 .ruff_cache/
+
+# Sphinx
+docs/_build/
+docs/_static/pyscript/
