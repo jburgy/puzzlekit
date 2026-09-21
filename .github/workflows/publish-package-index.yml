@@ -25,7 +25,7 @@ jobs:
           enable-cache: true
           python-version: "3.13"
       - run: uv build --no-sources
-      - run: python scripts/build_package_index.py --package-name puzzlekit
+      - run: uv run python scripts/build_package_index.py --package-name puzzlekit
       - name: Commit package index artifacts
         run: |
           if git diff --quiet -- docs/simple docs/packages; then
@@ -35,7 +35,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add docs/simple docs/packages
-          version=$(python - <<'PY'
+          version=$(uv run python - <<'PY'
 from pathlib import Path
 
 for line in Path("pyproject.toml").read_text(encoding="utf-8").splitlines():
