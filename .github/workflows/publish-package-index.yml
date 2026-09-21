@@ -36,14 +36,14 @@ jobs:
           git config user.email github-actions@github.com
           git add docs/simple docs/packages
           version=$(uv run python - <<'PY'
-from pathlib import Path
+          from pathlib import Path
 
-for line in Path("pyproject.toml").read_text(encoding="utf-8").splitlines():
-    if line.startswith("version = "):
-        print(line.split('"')[1])
-        break
-PY
-)
+          for line in Path("pyproject.toml").read_text(encoding="utf-8").splitlines():
+              if line.startswith("version = "):
+                  print(line.split('"')[1])
+                  break
+          PY
+          )
           git commit -m "Publish puzzlekit ${version} package index"
           git push
       - run: uv sync --group docs --locked
