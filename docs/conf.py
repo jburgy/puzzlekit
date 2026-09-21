@@ -23,7 +23,11 @@ exclude_patterns = ["_build"]
 
 html_theme = "furo"
 html_static_path = ["_static"]
-html_extra_path = ["_extra"]  # llms.txt and .nojekyll must land at the site root
+html_extra_path = [
+    "_extra",
+    "simple",
+    "packages",
+]  # package index directories and llms.txt must land at the site root
 html_title = "puzzlekit"
 html_baseurl = "https://bur.gy/puzzlekit/"
 
