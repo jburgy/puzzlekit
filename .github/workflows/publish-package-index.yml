@@ -1,4 +1,4 @@
-name: publish-package-index
+name: Publish package index
 
 on:
   workflow_dispatch:
