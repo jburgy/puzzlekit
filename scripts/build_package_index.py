@@ -33,9 +33,9 @@ def render_index(title: str, links: list[tuple[str, str]]) -> str:
     )
     return (
         "<!DOCTYPE html>\n"
-        "<html lang=\"en\">\n"
+        '<html lang="en">\n'
         "  <head>\n"
-        f"    <meta charset=\"utf-8\">\n    <title>{html.escape(title)}</title>\n"
+        f'    <meta charset="utf-8">\n    <title>{html.escape(title)}</title>\n'
         "  </head>\n"
         "  <body>\n"
         f"    <h1>{html.escape(title)}</h1>\n"
